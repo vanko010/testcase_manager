@@ -1,0 +1,30 @@
+# Môi trường ảo và cache
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Database local
+instance/
+
+# Thư mục uploads
+uploads/
+
+# Môi trường IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Thư mục logs và cache
+logs/
+*.log
+.cache/
+
+# Các file tạm thời khác
+.DS_Store
+Thumbs.db

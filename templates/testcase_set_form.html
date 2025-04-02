@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if testcase_set %}Sửa{% else %}Tạo mới{% endif %} Bộ Testcase - Quản Lý Testcase
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Trang chủ</a></li>
+        {% if testcase_set %}
+            <li class="breadcrumb-item"><a href="{{ url_for('testcase_set.detail', id=testcase_set.id) }}">{{ testcase_set.name }}</a></li>
+            <li class="breadcrumb-item active">Sửa</li>
+        {% else %}
+            <li class="breadcrumb-item active">Tạo mới Bộ Testcase</li>
+        {% endif %}
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h2>{% if testcase_set %}Sửa{% else %}Tạo mới{% endif %} Bộ Testcase</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ testcase_set.name if testcase_set else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ testcase_set.description if testcase_set else '' }}</textarea>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="is_public" name="is_public" {% if testcase_set and testcase_set.is_public %}checked{% endif %}>
+                <label class="form-check-label" for="is_public">Công khai (Cho phép mọi người xem)</label>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('testcase_set.detail', id=testcase_set.id) if testcase_set else url_for('dashboard') }}" class="btn btn-secondary">Hủy</a>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

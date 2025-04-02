@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Lỗi - Quản Lý Testcase{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="text-danger">Đã xảy ra lỗi</h1>
+    <div class="alert alert-danger">
+        <p>{{ error }}</p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Quay lại trang chủ</a>
+</div>
+{% endblock %}

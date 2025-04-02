@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if testcase %}Sửa{% else %}Thêm mới{% endif %} Testcase - Quản Lý Testcase
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('testcase_set.detail', id=testcase_set.id) }}">{{ testcase_set.name }}</a></li>
+        <li class="breadcrumb-item active">{% if testcase %}Sửa{% else %}Thêm mới{% endif %} Testcase</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h2>{% if testcase %}Sửa{% else %}Thêm mới{% endif %} Testcase</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label for="description" class="form-label">Test Description</label>
+                <input type="text" class="form-control" id="description" name="description" value="{{ testcase.description if testcase else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="step" class="form-label">Step</label>
+                <textarea class="form-control" id="step" name="step" rows="5">{{ testcase.step if testcase else '' }}</textarea>
+                <small class="form-text text-muted">Sử dụng xuống dòng để phân tách các bước.</small>
+            </div>
+            <div class="mb-3">
+                <label for="expected_result" class="form-label">Expected Result</label>
+                <textarea class="form-control" id="expected_result" name="expected_result" rows="3">{{ testcase.expected_result if testcase else '' }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="Not Executed" {% if testcase and testcase.status == 'Not Executed' %}selected{% endif %}>Not Executed</option>
+                    <option value="Passed" {% if testcase and testcase.status == 'Passed' %}selected{% endif %}>Passed</option>
+                    <option value="Failed" {% if testcase and testcase.status == 'Failed' %}selected{% endif %}>Failed</option>
+                </select>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('testcase_set.detail', id=testcase_set.id) }}" class="btn btn-secondary">Hủy</a>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Trang Chủ - Quản Lý Testcase{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Danh Sách Bộ Testcase</h1>
+    <a href="{{ url_for('testcase_set.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Tạo Bộ Testcase Mới
+    </a>
+</div>
+
+{% if testcase_sets %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Mô tả</th>
+                    <th>Số Testcase</th>
+                    <th>Chủ sở hữu</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày cập nhật</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for testcase_set in testcase_sets %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('testcase_set.detail', id=testcase_set.id) }}">
+                            {{ testcase_set.name }}
+                        </a>
+                    </td>
+                    <td>{{ testcase_set.description }}</td>
+                    <td>{{ testcase_set.test_cases|length }}</td>
+                    <td>{{ testcase_set.user.username if testcase_set.user else 'N/A' }}</td>
+                    <td>
+                        <span class="badge {% if testcase_set.is_public %}bg-success{% else %}bg-secondary{% endif %}">
+                            {% if testcase_set.is_public %}Công khai{% else %}Riêng tư{% endif %}
+                        </span>
+                    </td>
+                    <td>{{ testcase_set.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('testcase_set.detail', id=testcase_set.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </a>
+
+                            {% if session.is_admin or testcase_set.user_id == session.user_id %}
+                            <a href="{{ url_for('testcase_set.edit', id=testcase_set.id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ testcase_set.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        {% if session.is_admin or testcase_set.user_id == session.user_id %}
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteModal{{ testcase_set.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Xác nhận xóa</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bạn có chắc chắn muốn xóa bộ testcase "{{ testcase_set.name }}"? Hành động này sẽ xóa tất cả các testcase trong bộ này.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <form action="{{ url_for('testcase_set.delete', id=testcase_set.id) }}" method="post">
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Chưa có bộ testcase nào. Nhấn nút "Tạo Bộ Testcase Mới" để bắt đầu.
+    </div>
+{% endif %}
+{% endblock %}
