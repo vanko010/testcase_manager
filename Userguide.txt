@@ -27,3 +27,8 @@ python app.py
 
 # Cho môi trường production
 gunicorn app:app
+
+
+ACCOUNT
+admin - 16112001@Aii
+user - 1234
