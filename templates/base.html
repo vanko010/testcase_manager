@@ -8,17 +8,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .container { margin-top: 2rem; }
-        .flash-messages { margin-bottom: 1.5rem; }
+        .flash-messages { margin-bottom: a1.5rem; }
         .badge.bg-success { background-color: #28a745 !important; }
         .badge.bg-danger { background-color: #dc3545 !important; }
         .badge.bg-secondary { background-color: #6c757d !important; }
+
+        /* Điều chỉnh navbar */
+        .navbar {
+            background-color: #0d6efd !important; /* Màu xanh bootstrap */
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Điều chỉnh logo */
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Điều chỉnh menu items */
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Badge cho trạng thái */
+        .badge.cong-khai {
+            background-color: #28a745;
+            color: white;
+            padding: 0.35em 0.65em;
+            border-radius: 0.25rem;
+        }
+
+        .badge.rieng-tu {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.35em 0.65em;
+            border-radius: 0.25rem;
+        }
+
+        /* Nút tìm kiếm và Thêm mới */
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
     </style>
     {% block styles %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Quản Lý Testcase</a>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='css/image.png') }}" alt="Logo">
+                <span>Quản Lý Testcase</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

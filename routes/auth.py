@@ -38,6 +38,10 @@ def admin_required(f):
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    # Kiểm tra xem người dùng đã đăng nhập chưa
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))  # Nếu đã đăng nhập, chuyển hướng về Dashboard
+
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
@@ -64,8 +68,13 @@ def register():
     return render_template('auth/register.html')
 
 
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    # Kiểm tra xem người dùng đã đăng nhập chưa
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))  # Nếu đã đăng nhập, chuyển hướng về Dashboard
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -89,13 +98,14 @@ def login():
     return render_template('auth/login.html')
 
 
+
 @auth_bp.route('/logout')
 def logout():
     session.pop('user_id', None)
     session.pop('username', None)
     session.pop('is_admin', None)
     flash('Bạn đã đăng xuất thành công!', 'success')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login'))  # Chuyển hướng về trang đăng nhập
 
 
 @auth_bp.route('/profile')

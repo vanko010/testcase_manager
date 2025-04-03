@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request  # Thêm request vào đây
+from flask import Flask, render_template, redirect, url_for, session, request, make_response  # Thêm request vào đây
 from flask_migrate import Migrate
 from models.testcase_set import db, TestCaseSet
 from models.testcase import TestCase
@@ -9,6 +9,7 @@ from routes.auth import auth_bp, login_required
 import os
 import sqlite3
 from config import Config
+from sqlalchemy import or_
 
 # In phiên bản SQLite để debug
 print(f"SQLite version: {sqlite3.sqlite_version}")
@@ -67,12 +68,23 @@ def dashboard():
 
     if is_admin:
         # Admin có thể xem tất cả bộ testcase
-        testcase_sets = TestCaseSet.query.filter(TestCaseSet.name.contains(search_query)).all()
+        testcase_sets = TestCaseSet.query.filter(
+            or_(
+                TestCaseSet.name.contains(search_query),
+                TestCaseSet.description.contains(search_query)
+            )
+        ).all()
     else:
         # User thường chỉ xem bộ testcase của mình và các testcase công khai
         testcase_sets = TestCaseSet.query.filter(
-            (TestCaseSet.user_id == user_id) | (TestCaseSet.is_public == True),
-            TestCaseSet.name.contains(search_query)
+            or_(
+                (TestCaseSet.user_id == user_id),
+                (TestCaseSet.is_public == True)
+            ),
+            or_(
+                TestCaseSet.name.contains(search_query),
+                TestCaseSet.description.contains(search_query)
+            )
         ).all()
 
     return render_template('dashboard.html', testcase_sets=testcase_sets, search_query=search_query)
@@ -98,6 +110,14 @@ def internal_server_error(e):
 def inject_session():
     from flask import session
     return dict(session=session)
+
+# Thêm hàm add_header để ngăn chặn cache
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 if __name__ == '__main__':
     with app.app_context():
