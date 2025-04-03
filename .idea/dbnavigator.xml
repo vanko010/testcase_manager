@@ -6,7 +6,7 @@
   </component>
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
@@ -24,27 +24,31 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2">
-      <console name="TestcaseDB" type="STANDARD" schema="main" session="Main"><![CDATA[sqlite3 /home/nvpa/PycharmProjects/testcase_manager/instance/testcase_manager.db]]></console>
+      <console name="TestcaseDB" type="STANDARD" schema="main" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" object-ref="schemas/main/tables/user" />
-      <object connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" object-ref="consoles/TestcaseDB" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.test_case_set" active-filter-id="" />
+    <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.test_case" active-filter-id="1151052f-6efd-47a0-b52b-0a95dd73952c">
+      <filter id="1151052f-6efd-47a0-b52b-0a95dd73952c" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-actions>
+    <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.test_case_set" active-filter-id="97383074-4c1f-4f2c-ba6c-cf8a4919a47d">
+      <filter id="97383074-4c1f-4f2c-ba6c-cf8a4919a47d" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-actions>
     <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.user" active-filter-id="1a5af2f3-a68f-4052-abbb-f4f59d2f3d34">
       <filter id="1a5af2f3-a68f-4052-abbb-f4f59d2f3d34" name="User Filter" temporary="false" custom-name="true" type="basic" join-type="AND" />
     </filter-actions>
-    <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.alembic_version" active-filter-id="" />
+    <filter-actions connection-id="4dbf4e2f-31af-414c-b367-1d7f42fad5a2" dataset="main.alembic_version" active-filter-id="38a8bda8-44ca-450b-aa4a-eb7bfa55ecfb">
+      <filter id="38a8bda8-44ca-450b-aa4a-eb7bfa55ecfb" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
