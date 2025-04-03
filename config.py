@@ -23,9 +23,9 @@ class Config:
 
     # Cú pháp đúng cho đường dẫn tuyệt đối trên Linux/Unix (4 dấu /)
     if os.name == 'posix':  # Linux/Unix/Mac
-        SQLALCHEMY_DATABASE_URI = f"sqlite:////{db_path}"
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}?timeout=10"
     else:  # Windows
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}?timeout=10"
 
     # In thông tin debug
     print(f"OS name: {os.name}")

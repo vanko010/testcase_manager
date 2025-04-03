@@ -39,6 +39,9 @@
                                     {% if user.is_admin %}Thu hồi quyền quản trị{% else %}Cấp quyền quản trị{% endif %}
                                 </button>
                             </form>
+                            <a href="{{ url_for('auth.reset_user_password', id=user.id) }}" class="btn btn-sm btn-info">
+                                Đổi mật khẩu
+                            </a>
                             {% else %}
                             <span class="text-muted">Tài khoản hiện tại</span>
                             {% endif %}

@@ -11,7 +11,6 @@ testcase_bp = Blueprint('testcase', __name__, url_prefix='/testcase')
 def create(testcase_set_id):
     testcase_set = TestCaseSet.query.get_or_404(testcase_set_id)
 
-    # Kiểm tra quyền
     user_id = session.get('user_id')
     is_admin = session.get('is_admin', False)
 
@@ -20,32 +19,35 @@ def create(testcase_set_id):
         return redirect(url_for('dashboard'))
 
     if request.method == 'POST':
-        # Lấy số thứ tự tiếp theo
-        last_testcase = TestCase.query.filter_by(test_case_set_id=testcase_set_id).order_by(
-            TestCase.number.desc()).first()
-        number = 1 if not last_testcase else last_testcase.number + 1
+        try:
+            last_testcase = TestCase.query.filter_by(test_case_set_id=testcase_set_id).order_by(
+                TestCase.number.desc()).first()
+            number = 1 if not last_testcase else last_testcase.number + 1
 
-        description = request.form['description']
-        step = request.form['step']
-        expected_result = request.form['expected_result']
-        status = request.form['status']
+            description = request.form['description']
+            step = request.form['step']
+            expected_result = request.form['expected_result']
+            status = request.form['status']
 
-        testcase = TestCase(
-            test_case_set_id=testcase_set_id,
-            number=number,
-            description=description,
-            step=step,
-            expected_result=expected_result,
-            status=status
-        )
+            testcase = TestCase(
+                test_case_set_id=testcase_set_id,
+                number=number,
+                description=description,
+                step=step,
+                expected_result=expected_result,
+                status=status
+            )
 
-        db.session.add(testcase)
-        db.session.commit()
-
-        flash('Tạo testcase thành công!', 'success')
-        return redirect(url_for('testcase_set.detail', id=testcase_set_id))
+            db.session.add(testcase)
+            db.session.commit()  # Commit sau khi thêm testcase
+            flash('Tạo testcase thành công!', 'success')
+            return redirect(url_for('testcase_set.detail', id=testcase_set_id))
+        except Exception as e:
+            db.session.rollback()  # Rollback nếu có lỗi
+            flash('Có lỗi xảy ra khi thêm testcase: ' + str(e), 'danger')
 
     return render_template('testcase_form.html', testcase_set=testcase_set)
+
 
 
 @testcase_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

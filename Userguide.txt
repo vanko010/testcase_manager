@@ -14,6 +14,9 @@ Chạy lệnh trong terminal
 Cài đặt dependencies
 pip install -r requirements.txt
 
+pip install pandas==2.1.0
+
+
 Cài đặt các thư viện liên quan vào nhé ^^
 
 Khởi tại database

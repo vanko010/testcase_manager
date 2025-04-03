@@ -128,3 +128,62 @@ def toggle_admin(id):
     action = "cấp" if user.is_admin else "thu hồi"
     flash(f'Đã {action} quyền quản trị cho người dùng {user.username}', 'success')
     return redirect(url_for('auth.user_list'))
+
+
+@auth_bp.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    user = User.query.get(session['user_id'])
+
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+
+        # Kiểm tra mật khẩu hiện tại
+        if not user.check_password(current_password):
+            flash('Mật khẩu hiện tại không đúng', 'danger')
+            return redirect(url_for('auth.change_password'))
+
+        # Kiểm tra mật khẩu mới và xác nhận
+        if new_password != confirm_password:
+            flash('Mật khẩu mới không khớp', 'danger')
+            return redirect(url_for('auth.change_password'))
+
+        # Cập nhật mật khẩu mới
+        user.set_password(new_password)
+        db.session.commit()
+
+        flash('Đổi mật khẩu thành công!', 'success')
+        return redirect(url_for('auth.profile'))
+
+    return render_template('auth/change_password.html')
+
+
+@auth_bp.route('/users/<int:id>/reset-password', methods=['GET', 'POST'])
+@admin_required
+def reset_user_password(id):
+    user = User.query.get_or_404(id)
+
+    # Ngăn chặn admin đổi mật khẩu của chính mình qua route này
+    if user.id == session['user_id']:
+        flash('Vui lòng sử dụng trang đổi mật khẩu cá nhân', 'warning')
+        return redirect(url_for('auth.change_password'))
+
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+
+        # Kiểm tra mật khẩu mới và xác nhận
+        if new_password != confirm_password:
+            flash('Mật khẩu mới không khớp', 'danger')
+            return redirect(url_for('auth.reset_user_password', id=id))
+
+        # Cập nhật mật khẩu mới
+        user.set_password(new_password)
+        db.session.commit()
+
+        flash(f'Đặt lại mật khẩu cho người dùng {user.username} thành công!', 'success')
+        return redirect(url_for('auth.user_list'))
+
+    return render_template('auth/reset_password.html', user=user)

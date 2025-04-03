@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, request  # Thêm request vào đây
 from flask_migrate import Migrate
 from models.testcase_set import db, TestCaseSet
 from models.testcase import TestCase
@@ -9,7 +9,6 @@ from routes.auth import auth_bp, login_required
 import os
 import sqlite3
 from config import Config
-
 
 # In phiên bản SQLite để debug
 print(f"SQLite version: {sqlite3.sqlite_version}")
@@ -53,38 +52,30 @@ app.register_blueprint(testcase_set_bp)
 app.register_blueprint(testcase_bp)
 app.register_blueprint(auth_bp)
 
-
 @app.route('/')
 def index():
     return redirect(url_for('dashboard'))
 
-
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     user_id = session.get('user_id')
     is_admin = session.get('is_admin', False)
 
+    # Lấy từ khóa tìm kiếm từ request
+    search_query = request.args.get('search', '')
+
     if is_admin:
-        # Admin có thể xem tất cả
-        testcase_sets = TestCaseSet.query.all()
+        # Admin có thể xem tất cả bộ testcase
+        testcase_sets = TestCaseSet.query.filter(TestCaseSet.name.contains(search_query)).all()
     else:
-        # User thường chỉ xem của mình và các testcase công khai
+        # User thường chỉ xem bộ testcase của mình và các testcase công khai
         testcase_sets = TestCaseSet.query.filter(
-            (TestCaseSet.user_id == user_id) | (TestCaseSet.is_public == True)
+            (TestCaseSet.user_id == user_id) | (TestCaseSet.is_public == True),
+            TestCaseSet.name.contains(search_query)
         ).all()
 
-    return render_template('dashboard.html', testcase_sets=testcase_sets)
-
-
-@app.route('/testcase-set/<int:testcase_set_id>/export-excel')
-def export_excel(testcase_set_id):
-    # Lấy bộ testcase từ cơ sở dữ liệu
-    testcase_set = TestCaseSet.query.get_or_404(testcase_set_id)
-
-    # Gọi hàm xuất
-    return export_to_excel(testcase_set)
-
+    return render_template('dashboard.html', testcase_sets=testcase_sets, search_query=search_query)
 
 @app.template_filter('nl2br')
 def nl2br(value):
@@ -92,25 +83,21 @@ def nl2br(value):
         return value.replace('\n', '<br>')
     return ''
 
-
 # Xử lý lỗi 404
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error.html', error="Trang không tồn tại"), 404
-
 
 # Xử lý lỗi 500
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('error.html', error="Lỗi hệ thống"), 500
 
-
 # Thêm biến session vào context của template
 @app.context_processor
 def inject_session():
     from flask import session
     return dict(session=session)
-
 
 if __name__ == '__main__':
     with app.app_context():
