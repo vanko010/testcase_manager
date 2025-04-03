@@ -28,7 +28,11 @@
                 {% endif %}
                 <a href="{{ url_for('testcase_set.export', id=testcase_set.id) }}" class="btn btn-outline-success">
                     <i class="fas fa-file-export"></i> Xuất JSON
-                    </a>
+                </a>
+                <a href="{{ url_for('testcase_set.export_excel', id=testcase_set.id) }}" class="btn btn-outline-info">
+                    <i class="fas fa-file-excel"></i> Xuất Excel
+                </a>
+
 
                 {% if session.is_admin or testcase_set.user_id == session.user_id %}
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#importModal">

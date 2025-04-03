@@ -1,0 +1,29 @@
+Pull code về máy
+Python version 3.12
+
+Chạy lệnh trong terminal
+    mkdir testcase_manager && cd testcase_manager
+    python -m venv venv
+
+    # Kích hoạt môi trường ảo
+    # Trên Windows
+    venv\Scripts\activate
+    # Trên macOS/Linux
+    source venv/bin/activate
+
+Cài đặt dependencies
+pip install -r requirements.txt
+
+Cài đặt các thư viện liên quan vào nhé ^^
+
+Khởi tại database
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+Chạy ứng dụng
+# Cho môi trường local
+python app.py
+
+# Cho môi trường production
+gunicorn app:app

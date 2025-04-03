@@ -10,6 +10,7 @@ import os
 import sqlite3
 from config import Config
 
+
 # In phiên bản SQLite để debug
 print(f"SQLite version: {sqlite3.sqlite_version}")
 
@@ -74,6 +75,15 @@ def dashboard():
         ).all()
 
     return render_template('dashboard.html', testcase_sets=testcase_sets)
+
+
+@app.route('/testcase-set/<int:testcase_set_id>/export-excel')
+def export_excel(testcase_set_id):
+    # Lấy bộ testcase từ cơ sở dữ liệu
+    testcase_set = TestCaseSet.query.get_or_404(testcase_set_id)
+
+    # Gọi hàm xuất
+    return export_to_excel(testcase_set)
 
 
 @app.template_filter('nl2br')

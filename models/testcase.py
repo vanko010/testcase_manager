@@ -1,10 +1,10 @@
 from datetime import datetime
 from .testcase_set import db
 
-
 class TestCase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     test_case_set_id = db.Column(db.Integer, db.ForeignKey('test_case_set.id'), nullable=False)
+    number = db.Column(db.Integer, nullable=False)  # Đảm bảo thuộc tính này tồn tại
     description = db.Column(db.Text, nullable=False)
     step = db.Column(db.Text)
     expected_result = db.Column(db.Text)

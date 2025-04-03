@@ -153,6 +153,22 @@ def import_testcases(id):
 
     return redirect(url_for('testcase_set.detail', id=testcase_set.id))
 
+@testcase_set_bp.route('/<int:id>/export-excel')
+@login_required
+def export_excel(id):
+    """Xuất bộ testcase ra định dạng Excel"""
+    testcase_set = TestCaseSet.query.get_or_404(id)
+
+    # Kiểm tra quyền
+    user_id = session.get('user_id')
+    is_admin = session.get('is_admin', False)
+
+    if not is_admin and testcase_set.user_id != user_id and not testcase_set.is_public:
+        flash('Bạn không có quyền xuất bộ testcase này', 'danger')
+        return redirect(url_for('testcase_set.index'))
+
+    return export_to_excel(testcase_set)
+
 
 @testcase_set_bp.route('/<int:id>/export')
 @login_required
