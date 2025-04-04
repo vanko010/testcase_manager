@@ -197,3 +197,38 @@ def reset_user_password(id):
         return redirect(url_for('auth.user_list'))
 
     return render_template('auth/reset_password.html', user=user)
+
+@auth_bp.route('/create-user', methods=['GET', 'POST'])
+def create_user():
+    # Kiểm tra quyền admin
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash('Bạn không có quyền truy cập trang này', 'danger')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        role = request.form['role']  # Lấy vai trò từ form
+
+        user_exists = User.query.filter((User.username == username) | (User.email == email)).first()
+        if user_exists:
+            flash('Tên đăng nhập hoặc email đã tồn tại', 'danger')
+            return redirect(url_for('auth.create_user'))
+
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
+
+        # Gán vai trò
+        if role == 'admin':
+            new_user.is_admin = True
+        else:
+            new_user.is_admin = False
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Tạo tài khoản thành công!', 'success')
+        return redirect(url_for('auth.user_list'))
+
+    return render_template('auth/create_user.html')

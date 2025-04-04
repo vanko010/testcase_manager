@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Tạo Mới Người Dùng - Quản Lý Testcase{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Tạo Mới Người Dùng</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Vai trò</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="user">Người dùng</option>
+                    <option value="admin">Quản trị viên</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Tạo mới người dùng</button>
+            <a href="{{ url_for('auth.user_list') }}" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
